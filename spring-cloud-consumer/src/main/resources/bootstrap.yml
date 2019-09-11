@@ -1,10 +1,19 @@
 spring:
   application:
-    name: spring-cloud-consumer
+    name: consumer
   cloud:
+    #开启轮询重试机制
     loadbalancer:
       retry:
-        enabled: true  #开启轮询重试机制
+        enabled: true
+    #配置中心
+    config:
+      profile: dev
+      label: master
+      uri: http://localhost:6000/
+      name: application
+  profiles:
+    active: dev
 eureka:
   client:
     service-url:
