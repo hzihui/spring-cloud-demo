@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: spring-cloud-eureka
+eureka:
+  client:
+    register-with-eureka: false  #是否将自己注册到server中
+    fetch-registry: false  #是否从注册中心获取注册列表信息
+server:
+  port: 1000
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

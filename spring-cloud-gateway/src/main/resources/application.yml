@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: spring-cloud-gateway
+  cloud:
+    gateway:
+      #从eureka中获取服务进行转发 访问地址：http://网关地址：端口/服务中心注册 serviceId/具体的 url
+      discovery:
+        locator:
+          enabled: true
+      #配置方式自定义路由规则
+      routes:
+      - id: test1  #id 唯一
+        uri: lb://SPRING-CLOUD-CONSUMER  #转发路径
+        predicates: # 谓词断言
+          - Path=/openFeign/openFeignTest
+          - After=2018-04-22T06:06:06+08:00[Asia/Shanghai]
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1000/eureka/
+server:
+  port: 4000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+

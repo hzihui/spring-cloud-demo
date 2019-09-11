@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: spring-cloud-provider
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1000/eureka/
+server:
+  port: 2200
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

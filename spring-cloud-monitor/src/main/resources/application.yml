@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: spring-cloud-monitor
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1000/eureka/
+server:
+  port: 5000
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"

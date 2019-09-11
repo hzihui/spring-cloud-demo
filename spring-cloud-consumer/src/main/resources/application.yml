@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: spring-cloud-consumer
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true  #开启轮询重试机制
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1000/eureka/
+server:
+  port: 3000
+
+ribbon:
+  #开启ribbon饥饿加载
+  eager-load:
+    enabled: true
+  #最大自动重试次数，不包含第一次请求
+  MaxAutoRetries: 5
+  #最大重试server个数
+  MaxAutoRetriesNextServer: 1
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
