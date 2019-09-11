@@ -1,6 +1,7 @@
 package com.hzihui.cloud.consumer.controller;
 
 import com.hzihui.cloud.consumer.inteface.FeignTestInterface;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("openFeign")
 @RequiredArgsConstructor
+@Retry(name = "retryBackendA")
 public class OpenFeignController {
 
     private final FeignTestInterface feignTestInterface;

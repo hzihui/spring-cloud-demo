@@ -28,3 +28,49 @@ management:
   endpoint:
     health:
       show-details: always
+# 断路器配置
+resilience4j:
+  # 重试配置
+  retry:
+    # 启动顺序 值越小优先越高
+    retryAspectOrder: 399
+    backends:
+      #策略名称retryBackendA
+      retryBackendA:
+        maxRetryAttempts: 3  #最大重试次数
+        waitDuration: 600  #下一次重试等待时间，最小为100ms
+        eventConsumerBufferSize: 1 #表示重试事件缓冲区大小
+        enableExponentialBackoff: true #是否开启指数退避抖动算法，当一次调用失败后，如果在相同的时间间隔内发起重试，有可能发生连续的调用失败，因此可以开启指数退避抖动算法
+        exponentialBackoffMultiplier: 2 #时间间隔乘数
+        enableRandomizedWait: false #下次重试的时间间隔是否随机， enableRandomizedWait 和 enableExponentialBackoff 默认为 false ，并且这两个不可以同时开启
+        randomizedWaitFactor: 2
+        retryExceptionPredicate: com.hzihui.cloud.consumer.resilience4j.exception.RecordFailurePredicate
+        retryExceptions: #需要重试的异常
+          - java.io.IOException
+        ignoreExceptions:  #忽略的异常
+          - com.hzihui.cloud.consumer.resilience4j.exception.IgnoredException
+  #熔断配置
+  circuitbreaker:
+    backends:
+      circuitbreakerA:
+        ringBufferSizeInClosedState: 5  #关闭状态下环形缓冲区大小
+        ringBufferSizeInHalfOpenState: 3 #半开状态下缓冲区大小
+        waitInterval: 5000 #开启状态切换至半开、关闭状态需要保持的时间
+        failureRateThreshold: 50 #故障阈值百分比,当超过配置的50%断路器打开
+        eventConsumerBufferSize: 10 #缓冲区大小
+        registerHealthIndicator: true #开启健康检查
+        recordFailurePredicate: com.hzihui.cloud.consumer.resilience4j.exception.RecordFailurePredicate
+        recordExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+        ignoreExceptions:
+          - org.springframework.web.client.HttpClientErrorException
+  #限流配置
+  ratelimiter:
+    limiters:
+      limiterA:
+        limitForPeriod: 1 #请求频率阈值
+        limitRefreshPeriodInMillis: 5000 #频率刷新周期
+        timeoutInMillis: 5000 #请求可等待时间，默认5s
+        subscribeForEvents: true #开启事件订阅
+        registerHealthIndicator: true #开启健康检查
+        eventConsumerBufferSize: 100 #事件缓冲区大小
